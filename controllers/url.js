@@ -11,8 +11,10 @@ async function handleGenerateNewShortURL(req, res) {
         shortId: shortId,
         redirectURL: body.url,
         visitHistory: [],
+        createdBy:req.user._id
     })
-    console.log("ID being passed to template:", shortId);
+    console.log(shortId);
+    
     return res.render("home",{id:shortId})
 }
 
@@ -28,6 +30,7 @@ async function handlerGetAnalytics(req, res) {
 }
 
 async function handlerGetUrl (req, res) {
+    console.log(req);
     
     const shortId = req.params.shortId
     console.log(shortId + " shortId");
@@ -38,7 +41,7 @@ async function handlerGetUrl (req, res) {
             visitHistory: { timestamp: Date.now() }
         }
     })
-    res.redirect(entry.redirectURL)
+    res.redirect(entry)
 }
 
 async function handleAllUrl(req,res) {
