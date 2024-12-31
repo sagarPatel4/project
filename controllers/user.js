@@ -12,6 +12,8 @@ async function handleUserSignup(req, res) {
             email,
             password
         })
+        console.log(res);
+        
         return res.redirect("/")
     } catch (error) {
         if (error.code === 11000) {
@@ -36,7 +38,7 @@ async function handleUserSignin(req, res) {
         password
     })
     
-    if (!user) return res.render("signin", { error: "Invalid UserName And Password" })
+    if (!user) return res.render("login", { error: "Invalid UserName And Password" })
 
     const sessionId = uuidv4();
     setUser(sessionId,user)
