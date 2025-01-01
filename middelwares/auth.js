@@ -1,10 +1,11 @@
-const { getUser } = require("../service/auth")
+const { getUser } = require("../service/authjwt")
 
 async function restrictToLoggedInUserOnly(req, res, next) {
     const userUid = req.cookies.uid
 
     if (!userUid) return res.redirect("/signin")
-    const user = await getUser(userUid)
+    // const user = await getUser(userUid)  // ststefull authentication use
+    const user = await getUser(userUid)  // ststeless authentication use
 
     if (!user) return res.redirect("/signin")
 
@@ -16,8 +17,6 @@ async function restrictToLoggedInUserOnly(req, res, next) {
 }
  async function checkAuth(req, res, next) {
     const userUid = req.cookies.uid
-
-  
     const user = await getUser(userUid)
 
     req.user = user

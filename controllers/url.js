@@ -30,7 +30,7 @@ async function handlerGetAnalytics(req, res) {
 }
 
 async function handlerGetUrl (req, res) {
-    console.log(req);
+    console.log(req +" req");
     
     const shortId = req.params.shortId
     console.log(shortId + " shortId");
@@ -41,14 +41,17 @@ async function handlerGetUrl (req, res) {
             visitHistory: { timestamp: Date.now() }
         }
     })
-    res.redirect(entry)
+    console.log(entry +" entry");
+    
+    res.redirect(entry.redirectURL)
 }
 
 async function handleAllUrl(req,res) {
-    const allUrls=await URL.find({})
-    console.log("done" +allUrls);
+
+    if(!req.user) return res.redirect('/signin')
+        const allUrls = await URL.find({createdBy:req.user._id})
+        return res.render("home", { urls: allUrls ,});
     
-    return res.render("home",{urls:allUrls})
 }
 
 module.exports = {
