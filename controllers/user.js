@@ -1,6 +1,9 @@
 const { v4: uuidv4 } = require('uuid')
 const User = require('../models/user')
-const {setUser}=require("../service/auth")
+
+
+// const { setUser } = require("../service/auth")  //use statfull authentication
+const { setUser } = require("../service/authjwt")  // stateless authentication
 
 async function handleUserSignup(req, res) {
     const { name, email, password } = req.body;
@@ -12,6 +15,8 @@ async function handleUserSignup(req, res) {
             email,
             password
         })
+        console.log(res);
+
         return res.redirect("/")
     } catch (error) {
         if (error.code === 11000) {
@@ -35,12 +40,16 @@ async function handleUserSignin(req, res) {
         email,
         password
     })
-    
-    if (!user) return res.render("signup", { error: "Invalid UserName And Password" })
 
-    const sessionId = uuidv4();
-    setUser(sessionId,user)
-    res.cookie("uid",sessionId)
+    if (!user) return res.render("login", { error: "Invalid UserName And Password" })
+
+
+    // const sessionId = uuidv4();
+    // setUser(sessionId,user)
+    // res.cookie("uid",sessionId)
+
+    const token = setUser(user)
+    res.cookie("uid",token)
     return res.redirect("/")
 }
 

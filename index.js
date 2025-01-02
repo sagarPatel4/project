@@ -2,7 +2,7 @@ const path = require("path")
 const cookieParser = require('cookie-parser');
 const express = require('express')
 const { connectionToMongoDb } = require("./connnection")
-const {restrictToLoggedInUserOnly}=require("./middelwares/auth")
+const {restrictToLoggedInUserOnly,checkAuth}=require("./middelwares/auth")
 const urlRout = require("./routes/url")
 const userRoute=require("./routes/user")
 const staticRoute=require("./routes/staticRouter")
@@ -22,9 +22,11 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
 
-app.use("/url",urlRout)
+
+
+app.use("/url", restrictToLoggedInUserOnly,urlRout)
 app.use("/user", userRoute)
-app.use("/", staticRoute)
+app.use("/", checkAuth ,staticRoute)
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
