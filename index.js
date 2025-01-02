@@ -2,7 +2,7 @@ const path = require("path")
 const cookieParser = require('cookie-parser');
 const express = require('express')
 const { connectionToMongoDb } = require("./connnection")
-const {restrictToLoggedInUserOnly,checkAuth}=require("./middelwares/authtoken")
+const {checkForAuthentication,restrictTo}=require("./middelwares/authtoken")
 const urlRout = require("./routes/url")
 const userRoute=require("./routes/user")
 const staticRoute=require("./routes/staticRouter")
@@ -21,12 +21,13 @@ connectionToMongoDb('mongodb://localhost:27017/short_url')
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
+app.use(checkForAuthentication)
 
 
 
-app.use("/url", restrictToLoggedInUserOnly,urlRout)
+app.use("/url", restrictTo(["NORMAL"]),urlRout)
 app.use("/user", userRoute)
-app.use("/", checkAuth ,staticRoute)
+app.use("/", staticRoute)
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
