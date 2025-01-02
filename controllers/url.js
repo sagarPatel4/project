@@ -30,18 +30,20 @@ async function handlerGetAnalytics(req, res) {
 }
 
 async function handlerGetUrl (req, res) {
-    console.log(req);
-    
-    const shortId = req.params.shortId
-    console.log(shortId + " shortId");
-    const entry = await URL.findOneAndUpdate({
-        shortId
-    }, {
-        $push: {
-            visitHistory: { timestamp: Date.now() }
-        }
-    })
-    res.redirect(entry)
+    const shortId = req.params.shortId;
+  const entry = await URL.findOneAndUpdate(
+    {
+      shortId,
+    },
+    {
+      $push: {
+        visitHistory: {
+          timestamp: Date.now(),
+        },
+      },
+    }
+  );
+  res.redirect(entry.redirectURL);
 }
 
 async function handleAllUrl(req,res) {

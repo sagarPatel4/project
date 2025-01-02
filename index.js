@@ -22,7 +22,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
 
-app.use("/url", restrictToLoggedInUserOnly,urlRout)
+app.use("/url",urlRout)
 app.use("/user", userRoute)
 app.use("/", staticRoute)
 
